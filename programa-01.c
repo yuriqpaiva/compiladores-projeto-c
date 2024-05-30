@@ -8,12 +8,12 @@
 #define MAX 100
 
 // Função para verificar se o caractere é um operador
-int isOperator(char c) {
+int ehOperador(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
 // Função para definir a precedência dos operadores
-int precedence(char op) {
+int precedencia(char op) {
     switch (op) {
         case '+':
         case '-':
@@ -27,48 +27,48 @@ int precedence(char op) {
 }
 
 // Função para converter expressão infixa para pós-fixa
-void infixToPostfix(char* infix, char* postfix) {
-    char stack[MAX];
-    int top = -1;
+void infixaParaPosfixa(char* infixa, char* posfixa) {
+    char pilha[MAX];
+    int topo = -1;
     int k = 0;
-    for (int i = 0; infix[i]; i++) {
+    for (int i = 0; infixa[i]; i++) {
         // Ignorar espaços
-        if (infix[i] == ' ') continue;
+        if (infixa[i] == ' ') continue;
 
         // Se o caractere é um dígito, adicioná-lo à saída
-        if (isdigit(infix[i])) {
-            while (isdigit(infix[i])) {
-                postfix[k++] = infix[i++];
+        if (isdigit(infixa[i])) {
+            while (isdigit(infixa[i])) {
+                posfixa[k++] = infixa[i++];
             }
-            postfix[k++] = ' ';
+            posfixa[k++] = ' ';
             i--; // Corrige o incremento adicional
         }
         // Se o caractere é um operador
-        else if (isOperator(infix[i])) {
-            while (top != -1 && precedence(stack[top]) >= precedence(infix[i])) {
-                postfix[k++] = stack[top--];
-                postfix[k++] = ' ';
+        else if (ehOperador(infixa[i])) {
+            while (topo != -1 && precedencia(pilha[topo]) >= precedencia(infixa[i])) {
+                posfixa[k++] = pilha[topo--];
+                posfixa[k++] = ' ';
             }
-            stack[++top] = infix[i];
+            pilha[++topo] = infixa[i];
         }
     }
     // Desempilhar os operadores restantes
-    while (top != -1) {
-        postfix[k++] = stack[top--];
-        postfix[k++] = ' ';
+    while (topo != -1) {
+        posfixa[k++] = pilha[topo--];
+        posfixa[k++] = ' ';
     }
-    postfix[k] = '\0';
+    posfixa[k] = '\0';
 }
 
 int main() {
-    char infix[MAX], postfix[MAX];
+    char infixa[MAX], posfixa[MAX];
 
     printf("Digite uma expressão infixa: ");
-    fgets(infix, MAX, stdin);
+    fgets(infixa, MAX, stdin);
 
-    infixToPostfix(infix, postfix);
+    infixaParaPosfixa(infixa, posfixa);
 
-    printf("Expressão pós-fixa: %s\n", postfix);
+    printf("Expressão pós-fixa: %s\n", posfixa);
 
     return 0;
 }
@@ -82,4 +82,3 @@ int main() {
   - 1 + 2 * 3 - 4 / 5 * 6 + 7     => Resultado: 1 2 3 * + 4 5 / 6 * - 7 +
   - 1 + 2 * 3 - 4 / 5 * 6 + 7 * 8 => Resultado: 1 2 3 * + 4 5 / 6 * - 7 8 * +
 */
-
